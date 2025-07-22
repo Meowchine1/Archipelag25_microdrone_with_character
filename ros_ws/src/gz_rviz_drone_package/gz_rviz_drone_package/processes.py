@@ -18,11 +18,9 @@ gnome_terminals = []
 commands = [ 
     "MicroXRCEAgent udp4 -p 8888 ",
     "gz sim -v 4 aruco_field.sdf"
-    ,
-    "ros2 run ros_gz_bridge parameter_bridge   /world/aruco_world/model/x500_mono_cam/link/camera_link/sensor/imager/image@sensor_msgs/msg/Image@gz.msgs.Image"
-    #,
-   # "ros2 run gz_ros2_bridge parameter_bridge /world/aruco_world/model/x500/link/camera_link/sensor/imager/image@sensor_msgs/msg/Image[gz.msgs.Image"
-    #,
+   # ,
+   # "ros2 run ros_gz_bridge parameter_bridge   /world/aruco_world/model/x500_mono_cam/link/camera_link/sensor/imager/image@sensor_msgs/msg/Image@gz.msgs.Image"
+   
     #"cd ~/PX4-Autopilot && make px4_sitl gz_x500" 
 ]
 

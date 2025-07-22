@@ -49,8 +49,8 @@ def generate_launch_description():
     # Пути к моделям и миру ArUco внутри текущего ROS пакета
     base_path = os.path.join(package_dir, 'resource', 'gz_aruco_world')
     world_path = os.path.join(base_path, 'worlds', 'aruco_field.sdf')
-    px4_models = os.path.expanduser('~/PX4-Autopilot/Tools/simulation/gz/models')
- 
+    #px4_models = os.path.expanduser('~/PX4-Autopilot/Tools/simulation/gz/models')
+    px4_models = os.path.expanduser('~/PX4-Autopilot/Tools/simulation/PX4-gazebo-models/models')
     return LaunchDescription([
 
         # Set GZ environment variables so Gazebo can find models/world

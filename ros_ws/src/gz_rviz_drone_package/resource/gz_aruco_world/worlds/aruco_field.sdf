@@ -1,9 +1,8 @@
 <?xml version="1.0" ?>
 <sdf version="1.9">
-  <world name="aruco_world"> 
-    <include>
-      <uri>model://ground_plane</uri>
-    </include>
+  <world name="aruco_world">
+    <include><uri>model://sun</uri></include>
+    <include><uri>model://ground_plane</uri></include>
     <include>
       <uri>model://aruco_0</uri>
       <pose>0.0 0.0 0 0 0 0</pose>
@@ -217,14 +216,14 @@
       <pose>5.0 5.0 0.1 0 0 0</pose>
     </include>
     <include>
-      <uri>model://x500_mono_cam</uri>
-      <name>x500_mono_cam_0</name>
+      <uri>model://mono_cam</uri>
+      <name>mono_cam_0</name>
       <pose>0 0 0.3 0 0 0</pose>
     </include>
     <include>
-      <uri>model://x500_mono_cam</uri>
-      <name>x500_mono_cam_1</name>
+      <uri>model://mono_cam</uri>
+      <name>mono_cam_1</name>
       <pose>6 6 0.3 0 0 0</pose>
-    </include> 
+    </include>
   </world>
 </sdf>
