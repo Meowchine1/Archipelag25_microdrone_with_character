@@ -1,0 +1,230 @@
+<?xml version="1.0" ?>
+<sdf version="1.9">
+  <world name="aruco_world"> 
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    <include>
+      <uri>model://aruco_0</uri>
+      <pose>0.0 0.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_1</uri>
+      <pose>1.0 0.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_2</uri>
+      <pose>2.0 0.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_3</uri>
+      <pose>3.0 0.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_4</uri>
+      <pose>4.0 0.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_5</uri>
+      <pose>5.0 0.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_6</uri>
+      <pose>6.0 0.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_7</uri>
+      <pose>0.0 1.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_8</uri>
+      <pose>1.0 1.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_9</uri>
+      <pose>2.0 1.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_10</uri>
+      <pose>3.0 1.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_11</uri>
+      <pose>4.0 1.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_12</uri>
+      <pose>5.0 1.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_13</uri>
+      <pose>6.0 1.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_14</uri>
+      <pose>0.0 2.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_15</uri>
+      <pose>1.0 2.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_16</uri>
+      <pose>2.0 2.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_17</uri>
+      <pose>3.0 2.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_18</uri>
+      <pose>4.0 2.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_19</uri>
+      <pose>5.0 2.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_20</uri>
+      <pose>6.0 2.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_21</uri>
+      <pose>0.0 3.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_22</uri>
+      <pose>1.0 3.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_23</uri>
+      <pose>2.0 3.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_24</uri>
+      <pose>3.0 3.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_25</uri>
+      <pose>4.0 3.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_26</uri>
+      <pose>5.0 3.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_27</uri>
+      <pose>6.0 3.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_28</uri>
+      <pose>0.0 4.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_29</uri>
+      <pose>1.0 4.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_30</uri>
+      <pose>2.0 4.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_31</uri>
+      <pose>3.0 4.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_32</uri>
+      <pose>4.0 4.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_33</uri>
+      <pose>5.0 4.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_34</uri>
+      <pose>6.0 4.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_35</uri>
+      <pose>0.0 5.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_36</uri>
+      <pose>1.0 5.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_37</uri>
+      <pose>2.0 5.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_38</uri>
+      <pose>3.0 5.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_39</uri>
+      <pose>4.0 5.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_40</uri>
+      <pose>5.0 5.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_41</uri>
+      <pose>6.0 5.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_42</uri>
+      <pose>0.0 6.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_43</uri>
+      <pose>1.0 6.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_44</uri>
+      <pose>2.0 6.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_45</uri>
+      <pose>3.0 6.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_46</uri>
+      <pose>4.0 6.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_47</uri>
+      <pose>5.0 6.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://aruco_48</uri>
+      <pose>6.0 6.0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://sphere_red</uri>
+      <pose>3.0 3.0 0.1 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://sphere_green</uri>
+      <pose>1.5 5.5 0.1 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://sphere_blue</uri>
+      <pose>5.5 1.5 0.1 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://sphere_yellow</uri>
+      <pose>5.0 5.0 0.1 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://x500_mono_cam</uri>
+      <name>x500_mono_cam_0</name>
+      <pose>0 0 0.3 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://x500_mono_cam</uri>
+      <name>x500_mono_cam_1</name>
+      <pose>6 6 0.3 0 0 0</pose>
+    </include> 
+  </world>
+</sdf>
