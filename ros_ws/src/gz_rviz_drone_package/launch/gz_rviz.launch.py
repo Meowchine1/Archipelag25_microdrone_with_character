@@ -57,11 +57,22 @@ def generate_launch_description():
         SetEnvironmentVariable(name='GZ_SIM_RESOURCE_PATH', value=f'{base_path}/models:{base_path}/worlds:{px4_models}'),
         SetEnvironmentVariable(name='GZ_MODEL_PATH', value=f'{base_path}/models:{px4_models}'),
 
-        # Запускаем мир в Gazebo Sim
-        ExecuteProcess(
-            cmd=['gz', 'sim', '-v', '4', world_path],
-            output='screen'
-        ), 
+        # # Запускаем мир 
+        # ExecuteProcess(
+        #     cmd=['make', 'px4_sitl', 'gz_x500_vision'],
+        #     output='screen'
+        # ), 
+        # ExecuteProcess(
+        #     cmd=['bash', '-c', 'cd ~/PX4-Autopilot && PX4_GZ_WORLD=aruco_field make px4_sitl gz_x500_vision'],
+        #     shell=True,
+        #     output='screen'  # вывод на экран
+        # ),
+
+        # # MicroXRCEAgent — без вывода
+        # ExecuteProcess(
+        #     cmd=['MicroXRCEAgent', 'udp4', '-p', '8888'],
+        #     output='log'  # в лог, не на экран
+        # ),
         Node(
             package=package_name,
             namespace=package_name,

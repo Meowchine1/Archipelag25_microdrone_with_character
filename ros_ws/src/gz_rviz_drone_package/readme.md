@@ -24,3 +24,10 @@ sudo apt install gz-garden
 Чтобы включить опцию продвинутого запуска (с параметрами), нужно один раз собрать SITL, но не запускать:
 make px4_sitl
 Это создаст папку build/px4_sitl_default/... с бинарниками. 
+
+
+
+You need to create a bridge with either ros_gz_image or ros_gz_bridge.
+
+ros2 run ros_gz_image image_bridge /camera
+ros2 run ros_gz_bridge parameter_bridge /camera@sensor_msgs/msg/Image@ignition.msgs.Image
