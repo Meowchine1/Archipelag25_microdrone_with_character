@@ -15,40 +15,64 @@ gnome_terminals = []
 # export GZ_MODEL_PATH="$base_path/models:$HOME/PX4-Autopilot/Tools/simulation/gz/models"
 
 # Команды для запуска
-commands = [ 
-    "MicroXRCEAgent udp4 -p 8888 ",
-    "gz sim -v 4 aruco_field.sdf"
-   # ,
-   # "ros2 run ros_gz_bridge parameter_bridge   /world/aruco_world/model/x500_mono_cam/link/camera_link/sensor/imager/image@sensor_msgs/msg/Image@gz.msgs.Image"
-   
-    #"cd ~/PX4-Autopilot && make px4_sitl gz_x500" 
+
+commands = [
+    "MicroXRCEAgent udp4 -p 8888",
+    "gz sim -v 4 aruco_field.sdf",
+    
+
+##
+# ros2 run ros_gz_image image_bridge /camera
+# ros2 run ros_gz_bridge parameter_bridge /camera@sensor_msgs/msg/Image@ignition.msgs.Image
+# ##
+
+    # # PX4 drone 1
+    # "export PX4_GZ_MODEL_NAME=x500_vision_0 && "
+    # "export PX4_GZ_MODEL_POSE='3,3,0.5,0,0,0' && "
+    # "cd ~/PX4-Autopilot && make px4_sitl gz_x500_vision",
+
+    # # PX4 drone 2
+    # "export PX4_GZ_MODEL_NAME=x500_vision_1 && "
+    # "export PX4_GZ_MODEL_POSE='-3,-3,0.5,0,0,0' && "
+    # "cd ~/PX4-Autopilot && make px4_sitl gz_x500_vision",
 ]
 
-def terminate_processes(signal_received=None, frame=None):
-    """Завершает все gnome-terminal и их дочерние процессы."""
-    print("\n[INFO] Завершаем все процессы...")
+# commands = [ 
+#     "MicroXRCEAgent udp4 -p 8888 ",
+#     "gz sim -v 4 aruco_field.sdf",
+#      #"make px4_sitl gz_x500"
+#      "make px4_sitl gz_x500_vision"
+#      #"make px4_sitl gz_x500_depth"
+#      #"make px4_sitl gz_x500_lidar_down"
+#      #"make px4_sitl gz_x500_lidar_2d"
+#      #"make px4_sitl gz_x500_lidar_front"
+   
+# ]
 
+def terminate_processes(signal_received=None, frame=None):
+    print("\n[INFO] Завершаем все процессы...")
     for pid in gnome_terminals:
         try:
-            os.killpg(os.getpgid(pid), signal.SIGTERM)  # Отправляем SIGTERM всей группе
+            os.killpg(os.getpgid(pid), signal.SIGTERM)
             time.sleep(2)
-            os.killpg(os.getpgid(pid), signal.SIGKILL)  # Если не завершились, принудительно SIGKILL
+            os.killpg(os.getpgid(pid), signal.SIGKILL)
         except ProcessLookupError:
-            pass  # Если процесс уже завершен
-
+            pass
     print("[INFO] Все процессы завершены.")
     sys.exit(0)
 
-# Перехватываем SIGINT (Ctrl + C)
 signal.signal(signal.SIGINT, terminate_processes)
 
-# Запускаем каждый процесс в новом gnome-terminal
+# Запускаем каждый процесс в новом терминале
 for command in commands:
-    proc = subprocess.Popen(["gnome-terminal", "--", "bash", "-c", command], preexec_fn=os.setsid)
+    proc = subprocess.Popen(
+        ["gnome-terminal", "--", "bash", "-c", command],
+        preexec_fn=os.setsid
+    )
     gnome_terminals.append(proc.pid)
     time.sleep(1)
 
-# Ждем завершения (не завершается, пока не нажмешь Ctrl + C)
+# Бесконечное ожидание до Ctrl+C
 try:
     while True:
         time.sleep(1)

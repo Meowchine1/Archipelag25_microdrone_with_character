@@ -16,3 +16,11 @@ ros2 pkg create --license Apache-2.0 <pkg-name> --dependencies [deps]
 base_path="$HOME/archipelag25/gz_rviz_drone/gz_rviz_drone_package/resource/gz_aruco_world"
 export GZ_SIM_RESOURCE_PATH="$base_path/models:$base_path/worlds:$HOME/PX4-Autopilot/Tools/simulation/gz/models"
 export GZ_MODEL_PATH="$base_path/models:$HOME/PX4-Autopilot/Tools/simulation/gz/models"
+
+
+sudo apt install gz-garden
+
+
+Чтобы включить опцию продвинутого запуска (с параметрами), нужно один раз собрать SITL, но не запускать:
+make px4_sitl
+Это создаст папку build/px4_sitl_default/... с бинарниками. 
