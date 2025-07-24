@@ -25,7 +25,7 @@ def terminate_processes(signal_received=None, frame=None):
 
     # Завершаем все процессы px4, если остались
     subprocess.run(["pkill", "-f", "px4"])
-    
+    subprocess.run(["pkill", "-9", "ruby"]) 
     print("[INFO] Все процессы завершены.")
     sys.exit(0)
 
