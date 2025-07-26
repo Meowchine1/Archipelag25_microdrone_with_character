@@ -1,7 +1,7 @@
 .PHONY: all kill
 
 SHELL := /bin/bash
-package_name := gz_rviz_drone_package
+package_name := rviz_drone_package #gz_rviz_drone_package
 deps_package := px4_msgs
 
 all: check_ros_env build_deps build_main launch
