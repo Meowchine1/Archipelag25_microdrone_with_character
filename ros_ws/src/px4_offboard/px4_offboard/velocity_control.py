@@ -8,7 +8,7 @@ import rclpy
 from rclpy.node import Node
 import numpy as np
 from rclpy.clock import Clock
-from rclpy.qos import QoSProfile, QoSReliabilityPolicy, HistoryPolicy, QoSDurabilityPolicy
+from rclpy.qos import QoSProfile, ReliabilityPolicy,DurabilityPolicy, HistoryPolicy 
 import math
 from px4_msgs.msg import OffboardControlMode
 from px4_msgs.msg import TrajectorySetpoint
@@ -74,11 +74,16 @@ class OffboardControl(Node):
     def __init__(self):
         super().__init__('minimal_publisher')
         qos_profile = QoSProfile(
-        reliability=QoSReliabilityPolicy.BEST_EFFORT,
-        durability=QoSDurabilityPolicy.TRANSIENT_LOCAL,
-        history=HistoryPolicy.KEEP_LAST,
-        depth=10
-    )
+            reliability=ReliabilityPolicy.BEST_EFFORT,
+            durability=DurabilityPolicy.TRANSIENT_LOCAL,
+            history=HistoryPolicy.KEEP_LAST,
+            depth=1
+        )
+
+        # Create publishers
+        self.offboard_control_mode_publisher = self.create_publisher(
+            OffboardControlMode, '/fmu/in/offboard_control_mode', qos_profile)
+        
         self.status_sub = self.create_subscription(
             VehicleStatus,
             '/fmu/out/vehicle_status',
@@ -120,60 +125,101 @@ class OffboardControl(Node):
         self.offboard_state = False 
         self.failsafe = False
         self.current_state = "IDLE"
+        self.offboard_setpoint_counter = 0
  
+
+    def publish_offboard_control_heartbeat_signal(self):
+        """Publish the offboard control mode."""
+        msg = OffboardControlMode()
+        msg.position = True
+        msg.velocity = False
+        msg.acceleration = False
+        msg.attitude = False
+        msg.body_rate = False
+        msg.timestamp = int(self.get_clock().now().nanoseconds / 1000)
+        self.offboard_control_mode_publisher.publish(msg)
+
+    def arm(self):
+        """Send an arm command to the vehicle."""
+        self.publish_vehicle_command(
+            VehicleCommand.VEHICLE_CMD_COMPONENT_ARM_DISARM, param1=1.0)
+        self.get_logger().info('Arm command sent')
+
+    def disarm(self):
+        """Send a disarm command to the vehicle."""
+        self.publish_vehicle_command(
+            VehicleCommand.VEHICLE_CMD_COMPONENT_ARM_DISARM, param1=0.0)
+        self.get_logger().info('Disarm command sent')
+
+    def engage_offboard_mode(self):
+        """Switch to offboard mode."""
+        self.publish_vehicle_command(
+            VehicleCommand.VEHICLE_CMD_DO_SET_MODE, param1=1.0, param2=6.0)
+        self.get_logger().info("Switching to offboard mode")
+
     def switch_to_ofboard_timer(self):
-        match self.current_state:
-            case "IDLE":
-                if self.flightCheck:
-                    self.current_state = "ARMING"
-                    self.get_logger().info("move to ARMING state")
-                #self.arm()
+        self.publish_offboard_control_heartbeat_signal()
 
-            case "ARMING":
-                self.arm()
-                if not self.flightCheck:
-                    self.current_state = "IDLE"
-                    self.get_logger().info("ARMING --> back to IDLE state")
-                elif self.arming_state == VehicleStatus.ARMING_STATE_ARMED and self.myCnt > 10:
-                    self.current_state = "TAKEOFF"
-                    self.get_logger().info("move to TAKEOFF state")
+        if self.offboard_setpoint_counter == 10:
+            self.engage_offboard_mode()
+            self.arm() 
+
+        if self.offboard_setpoint_counter < 11:
+            self.offboard_setpoint_counter += 1
+
+        if self.arming_state != VehicleStatus.ARMING_STATE_ARMED:
+            self.arm() 
+
+        # match self.current_state:
+        #     case "IDLE":
+        #         if self.flightCheck:
+        #             self.current_state = "ARMING"
+        #             self.get_logger().info("move to ARMING state")
+        #         #self.arm()
+
+        #     case "ARMING":
+        #         self.arm()
+        #         if not self.flightCheck:
+        #             self.current_state = "IDLE"
+        #             #self.get_logger().info("ARMING --> back to IDLE state")
+        #         elif self.arming_state == VehicleStatus.ARMING_STATE_ARMED and self.myCnt > 10:
+        #             self.current_state = "TAKEOFF"
+        #             #self.get_logger().info("move to TAKEOFF state")
                  
 
-            case "TAKEOFF":
-                self.take_off()
-                if not self.flightCheck:
-                    self.current_state = "IDLE"
-                    self.get_logger().info("TAKEOFF --> back to IDLE state")
-                elif self.nav_state == VehicleStatus.NAVIGATION_STATE_AUTO_TAKEOFF: 
-                    self.current_state = "OFFBOARD"
-                    self.get_logger().info("move to OFFBOARD state")
+        #     case "TAKEOFF":
+        #         self.take_off()
+        #         if not self.flightCheck:
+        #             self.current_state = "IDLE"
+        #             #self.get_logger().info("TAKEOFF --> back to IDLE state")
+        #         elif self.nav_state == VehicleStatus.NAVIGATION_STATE_AUTO_TAKEOFF: 
+        #             self.current_state = "OFFBOARD"
+        #            # self.get_logger().info("move to OFFBOARD state")
                  
-            case "OFFBOARD":
-                self.state_offboard()
-                if self.arming_state != VehicleStatus.ARMING_STATE_ARMED:
-                    self.current_state = "IDLE"
-                    self.get_logger().info("Offboard --> back to IDLE state")
-                elif self.offboard_state:
-                        self.current_state = "OFFBOARD_FLYING"
-                        self.get_logger().info("Entered OFFBOARD_FLYING")
+        #     case "OFFBOARD":
+        #         self.state_offboard()
+        #         if self.arming_state != VehicleStatus.ARMING_STATE_ARMED:
+        #             self.current_state = "IDLE"
+        #             #self.get_logger().info("Offboard --> back to IDLE state")
+        #         elif self.offboard_state:
+        #                 self.current_state = "OFFBOARD_FLYING"
+        #                 #self.get_logger().info("Entered OFFBOARD_FLYING")
                  
-            case "OFFBOARD_FLYING":
-                # Проверка на потерю управления
-                if not self.flightCheck:
-                    self.get_logger().warn("OFFBOARD_FLYING --> back to IDLE state: flightCheck failed")
-                    self.current_state = "IDLE"
-                elif self.arming_state != VehicleStatus.ARMING_STATE_ARMED:
-                    self.get_logger().warn("OFFBOARD_FLYING --> back to IDLE state: Disarmed")
-                    self.current_state = "IDLE"
-                elif not self.offboard_state:
-                    self.get_logger().warn("OFFBOARD_FLYING → back to OFFBOARD: Offboard lost")
-                    self.current_state = "OFFBOARD"
-                elif self.failsafe:
-                    self.get_logger().warn("OFFBOARD_FLYING --> back to IDLE state: Failsafe")
-                    self.current_state = "IDLE"
-                
- 
-        self.myCnt += 1
+        #     case "OFFBOARD_FLYING":
+        #         # Проверка на потерю управления
+        #         if not self.flightCheck:
+        #             #self.get_logger().warn("OFFBOARD_FLYING --> back to IDLE state: flightCheck failed")
+        #             self.current_state = "IDLE"
+        #         elif self.arming_state != VehicleStatus.ARMING_STATE_ARMED:
+        #             #self.get_logger().warn("OFFBOARD_FLYING --> back to IDLE state: Disarmed")
+        #             self.current_state = "IDLE"
+        #         elif not self.offboard_state:
+        #             #self.get_logger().warn("OFFBOARD_FLYING → back to OFFBOARD: Offboard lost")
+        #             self.current_state = "OFFBOARD"
+        #         elif self.failsafe:
+        #             #self.get_logger().warn("OFFBOARD_FLYING --> back to IDLE state: Failsafe")
+        #             self.current_state = "IDLE"
+        # self.myCnt += 1
 
     def state_offboard(self):
         self.myCnt = 0
@@ -217,6 +263,8 @@ class OffboardControl(Node):
         # Обновление флага offboard
         self.offboard_state =  msg.nav_state == VehicleStatus.NAVIGATION_STATE_OFFBOARD 
         self.check_control_permission()
+
+        #self.get_logger().info(" vehicle_status_callback")
 
     def print_vehicle_status(self):
         self.get_logger().info(

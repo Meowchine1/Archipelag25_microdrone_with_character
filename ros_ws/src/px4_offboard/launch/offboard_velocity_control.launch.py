@@ -80,8 +80,8 @@ def generate_launch_description():
         #    Node(
         #     package='px4_offboard',
         #     namespace='px4_offboard',
-        #     executable='dynamics_drone_control',
-        #     name='dynamics_drone_control', 
+        #     executable='base_control_test',
+        #     name='base_control_test', 
         # ),
 
         Node(
