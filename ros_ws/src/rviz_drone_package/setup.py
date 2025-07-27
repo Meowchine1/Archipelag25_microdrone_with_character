@@ -13,13 +13,17 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='vor',
-    maintainer_email='vor',
+    maintainer='Meowchine1',
+    maintainer_email='meowchine111@gmail.com',
     description='TODO: Package description',
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'movenment_control = rviz_drone_package:movenment_control',
+            'processes = rviz_drone_package:processes',
+            'state_control = rviz_drone_package:state_control',
+            'visualizer = rviz_drone_package:visualizer',
         ],
     },
 )

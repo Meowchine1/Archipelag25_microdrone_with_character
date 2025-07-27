@@ -36,82 +36,61 @@ __author__ = "Braden Wagstaff"
 __contact__ = "braden@arkelectron.com"
 
 from launch import LaunchDescription
-from launch.actions import ExecuteProcess
+from launch.actions import ExecuteProcess, SetEnvironmentVariable
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 import os
 
 
 def generate_launch_description():
-    package_dir = get_package_share_directory('px4_offboard')
-    ekf_config = os.path.join(package_dir, 'config', 'ekf.yaml')
-    print("EKF config file path: ", ekf_config)
-    # bash_script_path = os.path.join(package_dir, 'scripts', 'TerminatorScript.sh')
+
+    # Пути к моделям и миру ArUco внутри текущего ROS пакета
+    # base_path = os.path.join('gz_rviz_drone_package', 'resource', 'gz_aruco_world')
+    # world_path = os.path.join(base_path, 'worlds', 'aruco_field.sdf')
+    #px4_models = os.path.expanduser('~/PX4-Autopilot/Tools/simulation/gz/models')
+    px4_models = os.path.expanduser('~/PX4-Autopilot/Tools/simulation/PX4-gazebo-models/models')
     return LaunchDescription([
-        # ExecuteProcess(cmd=['bash', bash_script_path], output='screen'),
+
+        # Set GZ environment variables so Gazebo can find models/world
+        #SetEnvironmentVariable(name='GZ_SIM_RESOURCE_PATH', value=f'{base_path}/models:{base_path}/worlds:{px4_models}'),
+        #SetEnvironmentVariable(name='GZ_MODEL_PATH', value=f'{base_path}/models:{px4_models}'),
+
+        # # Запуск мира
+        # ExecuteProcess(
+        #     cmd=['make', 'px4_sitl', 'gz_x500_vision'],
+        #     output='screen'
+        # ), 
+        # ExecuteProcess(
+        #     cmd=['bash', '-c', 'cd ~/PX4-Autopilot && PX4_GZ_WORLD=aruco_field make px4_sitl gz_x500_vision'],
+        #     shell=True,
+        #     output='screen'  # вывод на экран
+        # ),
+
+        # # MicroXRCEAgent — без вывода
+        # ExecuteProcess(
+        #     cmd=['MicroXRCEAgent', 'udp4', '-p', '8888'],
+        #     output='log'  # в лог, не на экран
+        # ),
         Node(
-            package='px4_offboard',
-            namespace='px4_offboard',
+            package="rviz_drone_package",
+            namespace="rviz_drone_package",
             executable='visualizer',
             name='visualizer'
         ),
         Node(
-            package='px4_offboard',
-            namespace='px4_offboard',
+            package="rviz_drone_package",
+            namespace="rviz_drone_package",
             executable='processes',
             name='processes',
             prefix='gnome-terminal --'
         ),
-         
         Node(
             package='rviz2',
             namespace='',
             executable='rviz2',
             name='rviz2',
-            arguments=['-d', [os.path.join(package_dir, 'visualize.rviz')]]
-        ),
-        # Node(
-        #     package='px4_offboard',
-        #     namespace='px4_offboard',
-        #     executable='px4_interaction',
-        #     name='px4_interaction', 
-        # ),
-
-        #    Node(
-        #     package='px4_offboard',
-        #     namespace='px4_offboard',
-        #     executable='base_control_test',
-        #     name='base_control_test', 
-        # ),
-
-        Node(
-            package='px4_offboard',
-            namespace='px4_offboard',
-            executable='custom_control',
-            name='custom_control', 
-        ),
-
-
-        Node(
-            package='px4_offboard',
-            namespace='px4_offboard',
-            executable='velocity_control',
-            name='velocity_control', 
-        ),
-
-        Node(
-            package='robot_localization',
-            executable='ekf_node',
-            name='ekf_filter_node',
-            output='screen',
-            parameters=[os.path.join(package_dir, 'config', 'ekf.yaml')]
+            arguments=['-d', [os.path.join('rviz_drone_package', 'visualize.rviz')]]
         )
-        # Node(
-        #     package='robot_localization',
-        #     executable='ekf_node',
-        #     name='ekf_filter_node',
-        #     output='screen',
-        #     parameters=['config/ekf.yaml']
-        # )
+  
     ])
 

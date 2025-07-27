@@ -31,8 +31,8 @@ setup(
     data_files=data_files,
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='vor',
-    maintainer_email='vor',
+    maintainer='Meowchine1',
+    maintainer_email='meowchine111@gmail.com',
     description='TODO: Package description',
     license='Apache-2.0',
     entry_points={
