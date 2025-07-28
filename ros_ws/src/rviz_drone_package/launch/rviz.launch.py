@@ -43,43 +43,32 @@ import os
 
 
 def generate_launch_description():
+    package_name = "rviz_drone_package"
+    package_dir = get_package_share_directory(package_name)
+     
 
-    # Пути к моделям и миру ArUco внутри текущего ROS пакета
-    # base_path = os.path.join('gz_rviz_drone_package', 'resource', 'gz_aruco_world')
-    # world_path = os.path.join(base_path, 'worlds', 'aruco_field.sdf')
-    #px4_models = os.path.expanduser('~/PX4-Autopilot/Tools/simulation/gz/models')
-    px4_models = os.path.expanduser('~/PX4-Autopilot/Tools/simulation/PX4-gazebo-models/models')
     return LaunchDescription([
-
-        # Set GZ environment variables so Gazebo can find models/world
-        #SetEnvironmentVariable(name='GZ_SIM_RESOURCE_PATH', value=f'{base_path}/models:{base_path}/worlds:{px4_models}'),
-        #SetEnvironmentVariable(name='GZ_MODEL_PATH', value=f'{base_path}/models:{px4_models}'),
-
-        # # Запуск мира
-        # ExecuteProcess(
-        #     cmd=['make', 'px4_sitl', 'gz_x500_vision'],
-        #     output='screen'
-        # ), 
-        # ExecuteProcess(
-        #     cmd=['bash', '-c', 'cd ~/PX4-Autopilot && PX4_GZ_WORLD=aruco_field make px4_sitl gz_x500_vision'],
-        #     shell=True,
-        #     output='screen'  # вывод на экран
-        # ),
-
-        # # MicroXRCEAgent — без вывода
-        # ExecuteProcess(
-        #     cmd=['MicroXRCEAgent', 'udp4', '-p', '8888'],
-        #     output='log'  # в лог, не на экран
-        # ),
         Node(
-            package="rviz_drone_package",
-            namespace="rviz_drone_package",
+            package=package_name,
+            namespace=package_name,
+            executable='movenment_control',
+            name='movenment_control'
+        ),
+        Node(
+            package=package_name,
+            namespace=package_name,
+            executable='state_control',
+            name='state_control'
+        ),
+        Node(
+            package=package_name,
+            namespace=package_name,
             executable='visualizer',
             name='visualizer'
         ),
         Node(
-            package="rviz_drone_package",
-            namespace="rviz_drone_package",
+            package=package_name,
+            namespace=package_name,
             executable='processes',
             name='processes',
             prefix='gnome-terminal --'
@@ -89,7 +78,14 @@ def generate_launch_description():
             namespace='',
             executable='rviz2',
             name='rviz2',
-            arguments=['-d', [os.path.join('rviz_drone_package', 'visualize.rviz')]]
+            arguments=['-d', [os.path.join(package_dir, 'visualize.rviz')]]
+        ),
+        Node(
+            package='robot_localization',
+            executable='ekf_node',
+            name='ekf_filter_node',
+            output='screen',
+            parameters=[os.path.join(package_dir, 'config', 'ekf.yaml')]
         )
   
     ])

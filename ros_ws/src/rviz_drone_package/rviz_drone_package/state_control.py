@@ -247,7 +247,7 @@ class StateControl(Node):
         # Обновление флага offboard
         self.offboard_state =  msg.nav_state == VehicleStatus.NAVIGATION_STATE_OFFBOARD 
         self.check_control_permission()
-        #self.get_logger().info(" vehicle_status_callback")
+        self.get_logger().info(" vehicle_status_callback")
 
     def print_vehicle_status(self):
         self.get_logger().info(
